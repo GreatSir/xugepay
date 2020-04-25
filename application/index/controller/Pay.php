@@ -32,8 +32,8 @@ class Pay extends Controller
 
     public function getPayParams(){
         $params = [];
-        $data = $this->request->post();
-
+        $post_data = $this->request->post('data');
+        $data = json_decode($post_data,true);
         $total = $data['total_price']*100;
 
         $params["cusid"] = AppConfig::CUSID;
@@ -98,7 +98,7 @@ class Pay extends Controller
         }
         if(AppUtil::ValidSign($params, AppConfig::APPKEY)){//验签成功
             //此处进行业务逻辑处理
-
+            
             echo "success";
         }
         else{
