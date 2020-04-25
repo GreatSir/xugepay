@@ -64,7 +64,7 @@ class Pay extends Controller
                 $response['status']=0;
                 $response['sign'] = '';
                 $response['sign_type'] = 'MD5';
-                return json();
+                return json($response);
             }
         }
     }
@@ -98,7 +98,7 @@ class Pay extends Controller
         }
         if(AppUtil::ValidSign($params, AppConfig::APPKEY)){//验签成功
             //此处进行业务逻辑处理
-            
+
             echo "success";
         }
         else{
