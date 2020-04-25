@@ -11,6 +11,7 @@ namespace app\index\controller;
 use app\index\utils\pay\AppConfig;
 use app\index\utils\pay\AppUtil;
 use think\Controller;
+use think\facade\Log;
 
 class Pay extends Controller
 {
@@ -52,6 +53,7 @@ class Pay extends Controller
         $paramsStr = AppUtil::ToUrlParams($params);
         $url = AppConfig::APIURL . "/pay";
         $rsp = curlRequest($url, $paramsStr);
+        Log::info($rsp);
 //        echo "请求返回:".$rsp;
 //        echo "<br/>";
         $rspArray = json_decode($rsp, true);
@@ -65,7 +67,11 @@ class Pay extends Controller
                 $response['sign'] = '';
                 $response['sign_type'] = 'MD5';
                 return json($response);
+            }else{
+                Log::info($rspArray['trxstatus']);
             }
+        }else{
+            Log::info("验证未通过");
         }
     }
 
