@@ -129,7 +129,8 @@ class Pay extends Controller
             $noticeData['data'] = json_encode($sign_data,JSON_UNESCAPED_UNICODE);
             $noticeData['sign'] = $this->getZhiChiSign($sign_data);
             $noticeData['sign_type'] = 'MD5';
-            $noticeRes = curlRequest($zhichiPayNoticeUrl,$noticeData);
+            $noticeStr = AppUtil::ToUrlParams($noticeData);
+            $noticeRes = curlRequest($zhichiPayNoticeUrl,$noticeStr);
             Log::info($noticeRes);
             echo "success";
         }
