@@ -112,31 +112,28 @@ class Pay extends Controller
         foreach($_POST as $key=>$val) {//动态遍历获取所有收到的参数,此步非常关键,因为收银宝以后可能会加字段,动态获取可以兼容由于收银宝加字段而引起的签名异常
             $params[$key] = $val;
         }
-        Log::error(json_encode($_POST,JSON_UNESCAPED_UNICODE));
         if(count($params)<1){//如果参数为空,则不进行处理
-            Log::info(116);
             echo "error";
             exit();
         }
         if(AppUtil::ValidSign($params, AppConfig::APPKEY)){//验签成功
             //此处进行业务逻辑处理
-            //
-            Log::info(json_encode($params,JSON_UNESCAPED_UNICODE));
             $zhichiPayNoticeUrl = 'https://www.jisuapp.cn/index.php/pay/Notify/ThirdApiPaymentCallback';
-            $noticeData = [];
-            $noticeData['app_id'] = '';
-            $noticeData['data'] = json_encode([
-                'order_id'=>'',
+            $sign_data = [
+                'order_id'=>$params['cusorderid'],
                 'transaction_id'=>$params['chnltrxid'],
                 'order_type'=>'1'
-            ],JSON_UNESCAPED_UNICODE);
-            $noticeData['sign'] = '';
+            ];
+            $noticeData = [];
+            $noticeData['app_id'] = '';
+            $noticeData['data'] = json_encode($sign_data,JSON_UNESCAPED_UNICODE);
+            $noticeData['sign'] = $this->getZhiChiSign($sign_data);
             $noticeData['sign_type'] = 'MD5';
-            //curlRequest($zhichiPayNoticeUrl,);
+            $noticeRes = curlRequest($zhichiPayNoticeUrl,$noticeData);
+            Log::info($noticeRes);
             echo "success";
         }
         else{
-            Log::info(138);
             echo "erro";
         }
     }
