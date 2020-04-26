@@ -112,7 +112,9 @@ class Pay extends Controller
         foreach($_POST as $key=>$val) {//动态遍历获取所有收到的参数,此步非常关键,因为收银宝以后可能会加字段,动态获取可以兼容由于收银宝加字段而引起的签名异常
             $params[$key] = $val;
         }
+        Log::error(json_encode($_POST,JSON_UNESCAPED_UNICODE));
         if(count($params)<1){//如果参数为空,则不进行处理
+            Log::info(116);
             echo "error";
             exit();
         }
@@ -134,6 +136,7 @@ class Pay extends Controller
             echo "success";
         }
         else{
+            Log::info(138);
             echo "erro";
         }
     }
