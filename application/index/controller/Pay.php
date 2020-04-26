@@ -125,7 +125,7 @@ class Pay extends Controller
                 'order_type'=>'1'
             ];
             $noticeData = [];
-            $noticeData['app_id'] = '';
+            $noticeData['app_id'] = AppConfig::JS_APPID;
             $noticeData['data'] = json_encode($sign_data,JSON_UNESCAPED_UNICODE);
             $noticeData['sign'] = $this->getZhiChiSign($sign_data);
             $noticeData['sign_type'] = 'MD5';
