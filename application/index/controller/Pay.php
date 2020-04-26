@@ -53,7 +53,6 @@ class Pay extends Controller
         $paramsStr = AppUtil::ToUrlParams($params);
         $url = AppConfig::APIURL . "/pay";
         $rsp = curlRequest($url, $paramsStr);
-        Log::info($rsp);
 //        echo "请求返回:".$rsp;
 //        echo "<br/>";
         $rspArray = json_decode($rsp, true);
@@ -64,9 +63,7 @@ class Pay extends Controller
                 $response['app_id'] = AppConfig::JS_APPID;
                 $response['data'] = $rspArray['payinfo'];
                 $response['status']=0;
-                Log::error(json_decode($rspArray['payinfo'],true));
                 $response['sign'] = $this->getZhiChiSign(json_decode($rspArray['payinfo'],true));
-                Log::error($response['sign']);
                 $response['sign_type'] = 'MD5';
                 return json($response);
             }else{
@@ -121,7 +118,19 @@ class Pay extends Controller
         }
         if(AppUtil::ValidSign($params, AppConfig::APPKEY)){//验签成功
             //此处进行业务逻辑处理
-
+            //
+            Log::info(json_encode($params,JSON_UNESCAPED_UNICODE));
+            $zhichiPayNoticeUrl = 'https://www.jisuapp.cn/index.php/pay/Notify/ThirdApiPaymentCallback';
+            $noticeData = [];
+            $noticeData['app_id'] = '';
+            $noticeData['data'] = json_encode([
+                'order_id'=>'',
+                'transaction_id'=>$params['chnltrxid'],
+                'order_type'=>'1'
+            ],JSON_UNESCAPED_UNICODE);
+            $noticeData['sign'] = '';
+            $noticeData['sign_type'] = 'MD5';
+            //curlRequest($zhichiPayNoticeUrl,);
             echo "success";
         }
         else{
