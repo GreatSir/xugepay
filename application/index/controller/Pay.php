@@ -64,7 +64,7 @@ class Pay extends Controller
                 $response['app_id'] = AppConfig::JS_APPID;
                 $response['data'] = $rspArray['payinfo'];
                 $response['status']=0;
-                $response['sign'] = '';
+                $response['sign'] = $this->getZhiChiSign(json_decode($rspArray['payinfo'],true));
                 $response['sign_type'] = 'MD5';
                 return json($response);
             }else{
@@ -75,6 +75,21 @@ class Pay extends Controller
         }
     }
 
+
+    private function getZhiChiSign($data)
+    {
+        if (is_string($data)) {
+            $str = $data;
+        } else {
+            ksort($data);
+            $str = '';
+            foreach ($data as $key => $value) {
+                $str .= "&{$key}={$value}";
+            }
+            $str = substr($str, 1); // 去除掉开头的 &
+        }
+        return strtolower(md5($str.'yidusen111'));// md5_key 为后台设置的md5加密key
+    }
     private function payValidSign($array){
         if("SUCCESS"==$array["retcode"]){
             $signRsp = strtolower($array["sign"]);
