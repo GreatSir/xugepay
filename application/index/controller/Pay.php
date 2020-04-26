@@ -64,9 +64,9 @@ class Pay extends Controller
                 $response['app_id'] = AppConfig::JS_APPID;
                 $response['data'] = $rspArray['payinfo'];
                 $response['status']=0;
-                Log::info(json_decode($rspArray,true));
+                Log::error(json_decode($rspArray['payinfo'],true));
                 $response['sign'] = $this->getZhiChiSign(json_decode($rspArray['payinfo'],true));
-                Log::info($response['sign']);
+                Log::error($response['sign']);
                 $response['sign_type'] = 'MD5';
                 return json($response);
             }else{
