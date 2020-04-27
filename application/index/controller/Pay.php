@@ -152,7 +152,7 @@ class Pay extends Controller
         $params['randomstr'] = getRandomStr();
         $params['sign'] = AppUtil::SignArray($params,AppConfig::APPKEY);
         $paramsStr = AppUtil::ToUrlParams($params);
-        $url = AppConfig::APIURL . "/refund";
+        $url = AppConfig::APIURL . "/cancel";
         $rsp = curlRequest($url, $paramsStr);
         Log::info($rsp);
         $rspArray = json_decode($rsp, true);
