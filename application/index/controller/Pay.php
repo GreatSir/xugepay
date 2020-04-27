@@ -166,35 +166,35 @@ class Pay extends Controller
         $pay_time = Db::name('order')->where([
             ['order_id','=',$data['order_id']]
         ])->value('pay_time');
+        $url = AppConfig::APIURL . "/refund";
         if(!empty($pay_time)){
             $pay_time_stamp = strtotime($pay_time);
             $now = time();
             if(($now-$pay_time_stamp)<86400){
                 $url = AppConfig::APIURL . "/cancel";
-            }else{
-                $url = AppConfig::APIURL . "/refund";
+            }
+        }
+
+
+        $rsp = curlRequest($url, $paramsStr);
+        Log::info($rsp);
+        $rspArray = json_decode($rsp, true);
+        if($this->payValidSign($rspArray)){
+            //验证通过
+            if($rspArray['trxstatus']=='0000'){
+                $response = [];
+                $response['app_id'] = AppConfig::JS_APPID;
+                $response['data'] = json_encode([
+                    'refund_id'=>$rspArray['trxid']
+                ],JSON_UNESCAPED_UNICODE);
+                $response['status']=0;
+                $response['sign'] = $this->getZhiChiSign([
+                    'refund_id'=>$rspArray['trxid']
+                ]);
+                $response['sign_type'] = 'MD5';
+                return json($response);
             }
 
-            $rsp = curlRequest($url, $paramsStr);
-            Log::info($rsp);
-            $rspArray = json_decode($rsp, true);
-            if($this->payValidSign($rspArray)){
-                //验证通过
-                if($rspArray['trxstatus']=='0000'){
-                    $response = [];
-                    $response['app_id'] = AppConfig::JS_APPID;
-                    $response['data'] = json_encode([
-                        'refund_id'=>$rspArray['trxid']
-                    ],JSON_UNESCAPED_UNICODE);
-                    $response['status']=0;
-                    $response['sign'] = $this->getZhiChiSign([
-                        'refund_id'=>$rspArray['trxid']
-                    ]);
-                    $response['sign_type'] = 'MD5';
-                    return json($response);
-                }
-
-            }
         }
 
 
