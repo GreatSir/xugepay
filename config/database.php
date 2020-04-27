@@ -19,9 +19,9 @@ return [
     // 用户名
     'username'        => 'root',
     // 密码
-    'password'        => 'maprun123',
+    'password'        => 'loopyun123',
     // 端口
-    'hostport'        => '',
+    'hostport'        => '63927',
     // 连接dsn
     'dsn'             => '',
     // 数据库连接参数
