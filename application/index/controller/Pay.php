@@ -148,6 +148,7 @@ class Pay extends Controller
         $params['version'] = AppConfig::APIVERSION;
         $params['trxamt'] = $data['refund_price']*100;
         $params['reqsn'] = $data['refund_order_id'];
+        $params['oldreqsn'] = $data['order_id'];
         $params['randomstr'] = getRandomStr();
         $params['sign'] = AppUtil::SignArray($params,AppConfig::APPKEY);
         $paramsStr = AppUtil::ToUrlParams($params);
