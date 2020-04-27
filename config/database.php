@@ -13,13 +13,13 @@ return [
     // 数据库类型
     'type'            => 'mysql',
     // 服务器地址
-    'hostname'        => '127.0.0.1',
+    'hostname'        => 'cd-cdb-3k6lonv6.sql.tencentcdb.com',
     // 数据库名
-    'database'        => '',
+    'database'        => 'pay',
     // 用户名
     'username'        => 'root',
     // 密码
-    'password'        => '',
+    'password'        => 'maprun123',
     // 端口
     'hostport'        => '',
     // 连接dsn
