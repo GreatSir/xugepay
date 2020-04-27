@@ -140,6 +140,38 @@ class Pay extends Controller
     }
 
     public function refundNotice(){
+        $params = [];
+        $post_data = $this->request->post('data');
+        $data = json_decode($post_data,true);
+        $params['cusid'] = AppConfig::CUSID;
+        $params['appid'] = AppConfig::APPID;
+        $params['version'] = AppConfig::APIVERSION;
+        $params['trxamt'] = $data['refund_price']*100;
+        $params['reqsn'] = $data['refund_order_id'];
+        $params['randomstr'] = getRandomStr();
+        $params['sign'] = AppUtil::SignArray($params,AppConfig::APPKEY);
+        $paramsStr = AppUtil::ToUrlParams($params);
+        $url = AppConfig::APIURL . "/refund";
+        $rsp = curlRequest($url, $paramsStr);
+        Log::info($rsp);
+        $rspArray = json_decode($rsp, true);
+        if($this->payValidSign($rspArray)){
+            //验证通过
+            if($rspArray['trxstatus']=='0000'){
+                $response = [];
+                $response['app_id'] = AppConfig::JS_APPID;
+                $response['data'] = json_encode([
+                    'refund_id'=>$rspArray['trxid']
+                ],JSON_UNESCAPED_UNICODE);
+                $response['status']=0;
+                $response['sign'] = $this->getZhiChiSign([
+                    'refund_id'=>$rspArray['trxid']
+                ]);
+                $response['sign_type'] = 'MD5';
+                return json($response);
+            }
+
+        }
 
     }
 
