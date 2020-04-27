@@ -60,7 +60,7 @@ class Pay extends Controller
         if($this->payValidSign($rspArray)){
             //验证通过，返回参数
             if($rspArray['trxstatus']=='0000'){
-                Db::name('order')->insertAll([
+                Db::name('order')->insert([
                     'order_id'=>$data['order_id'],
                     'create_time'=>date('Y-m-d H:i:s')
                 ]);
