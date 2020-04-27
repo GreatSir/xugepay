@@ -16,6 +16,8 @@ Route::get('think', function () {
 Route::get('hello/:name', 'index/hello');
 Route::any('getPayConfig','pay/getPayParams');
 Route::any('payNotice','pay/payNotice');
+Route::any('refundNotice','pay/refundNotice');
+Route::any('refundSearch','pay/refundSearch');
 return [
 
 ];

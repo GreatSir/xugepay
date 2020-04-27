@@ -138,4 +138,12 @@ class Pay extends Controller
             echo "erro";
         }
     }
+
+    public function refundNotice(){
+
+    }
+
+    public function refundSearch(){
+
+    }
 }
